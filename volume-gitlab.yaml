@@ -1,0 +1,88 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: gitlab-data
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 15Gi
+  nfs:
+    path: /root/nfs-data/gitlab-data
+    server: 192.168.100.101
+  persistentVolumeReclaimPolicy: Recycle
+  storageClassName: nfs
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: gitlab-conf
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 2Gi
+  nfs:
+    path: /root/nfs-data/gitlab-conf
+    server: 192.168.100.101
+  persistentVolumeReclaimPolicy: Recycle
+  storageClassName: nfs
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: gitlab-log
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 1Gi
+  nfs:
+    path: /root/nfs-data/gitlab-log
+    server: 192.168.100.101
+  persistentVolumeReclaimPolicy: Recycle
+  storageClassName: nfs
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gitlab-data
+  namespace: kube-ops
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 15G
+  storageClassName: nfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gitlab-conf
+  namespace: kube-ops
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 2G
+  storageClassName: nfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gitlab-log
+  namespace: kube-ops
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1G
+  storageClassName: nfs
+---
+
