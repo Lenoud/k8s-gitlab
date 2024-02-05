@@ -1,6 +1,6 @@
-## 4.gitlab平台的搭建
+## Gitlab平台的搭建
 <a name="QXAvi"></a>
-### **4.1部署GitLab**
+### **1.部署GitLab**
 GitLab主要涉及到3个应用：Redis、Postgresql和Gitlab 核心程序。
 <a name="gx7zW"></a>
 #### （1）基础准备
