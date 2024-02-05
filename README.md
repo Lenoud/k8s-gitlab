@@ -1,7 +1,6 @@
 ## Gitlab平台的搭建
 <a name="QXAvi"></a>
 ### **1.部署GitLab**
-GitLab主要涉及到3个应用：Redis、Postgresql和Gitlab 核心程序。
 <a name="gx7zW"></a>
 #### （1）基础准备
 所有节点解压软件包并导入镜像：<br /># tar -zxvf CICD-Runner.tar.gz<br /># docker load -i cicd-runner/images/image.tar
@@ -209,12 +208,12 @@ spec:
 #### （4）访问GitLab
 查看Service：<br />[root@k8s-master-node1 manifests]# kubectl -n kube-ops get svc<br />NAME     TYPE     CLUSTER-IP   EXTERNAL-IP  PORT(S)            AGE<br />gitlab      NodePort   10.96.0.38    <none>    80:30880/TCP,22:32222/TCP   2m2s<br />通过http://master_ip:30880访问GitLab，如图所示：<br />![image.png](https://cdn.nlark.com/yuque/0/2023/png/35492615/1688642260313-b9be8388-78a8-4f46-b584-87324e11274c.png#averageHue=%23fdfdfc&clientId=ud397a9f3-0d23-4&from=paste&height=591&id=u186b2251&originHeight=650&originWidth=1193&originalType=binary&ratio=1.100000023841858&rotation=0&showTitle=false&size=39525&status=done&style=none&taskId=uee309c97-8841-4d24-8747-753a48895e2&title=&width=1084.5454310385653)<br />登录后：<br />![image.png](https://cdn.nlark.com/yuque/0/2023/png/35492615/1688642988504-30cba939-d659-4c91-bd6f-ac98d1ccb718.png#averageHue=%23fdfdfd&clientId=u44ae5c08-4b4c-4&from=paste&height=641&id=u5f827242&originHeight=705&originWidth=1870&originalType=binary&ratio=1.100000023841858&rotation=0&showTitle=false&size=56782&status=done&style=none&taskId=ub297e70f-f15f-4744-8ad6-2d8ff576ff4&title=&width=1699.9999631534931)
 <a name="wiqYx"></a>
-## 5.gitlab平台的配置
+## gitlab平台的配置
 <a name="EnSQ5"></a>
-### 5.1 创建一个新的公开项目
+###  创建一个新的公开项目
 ![image.png](https://cdn.nlark.com/yuque/0/2023/png/35492615/1688643414773-e2c3d99a-5836-420b-aa32-28b38dcc4cbb.png#averageHue=%23fcf7f0&clientId=u44ae5c08-4b4c-4&from=paste&height=827&id=u32cf275a&originHeight=910&originWidth=1863&originalType=binary&ratio=1.100000023841858&rotation=0&showTitle=false&size=95305&status=done&style=none&taskId=u96affb4f-8b56-418b-b7c3-2a486a17586&title=&width=1693.636326927785)
 <a name="a93kn"></a>
-### 5.2 **部署Gitlab CI Runner**
+###  **部署Gitlab CI Runner**
 <a name="uuqLd"></a>
 #### （1）获取 Gitlab CI Register Token
 登录GitLab管理界面(http://master_ip:30880/admin)，然后点击左侧菜单栏中的Runners，如图所示：<br />![image.png](https://cdn.nlark.com/yuque/0/2023/png/35492615/1688643686026-41e7190d-c8c6-492b-a395-c38733dd6b8a.png#averageHue=%23f5f4f2&clientId=u44ae5c08-4b4c-4&from=paste&height=690&id=ubc5e1d03&originHeight=759&originWidth=1100&originalType=binary&ratio=1.100000023841858&rotation=0&showTitle=false&size=92171&status=done&style=none&taskId=ud4407356-8387-4ce6-a422-e9262428861&title=&width=999.9999783255842)<br />可以看到该页面中有两个重要参数：Runner URL和Register Token，后期部署Runner时会用到这两个参数。
@@ -386,7 +385,7 @@ roleRef:
 #### （3）部署GitLab CI Runner
 **创建Runner资源对象：**<br />[root@k8s-master-node1 manifests]# kubectl apply -f runner-configmap.yaml -f runner-scripts-configmap.yaml -f runner-token-secret.yaml -f runner-statefulset.yaml -f runner-rbac.yaml<br />configmap/gitlab-ci-runner-cm created<br />configmap/gitlab-ci-runner-scripts created<br />secret/gitlab-ci-token created<br />statefulset.apps/gitlab-ci-runner created<br />serviceaccount/gitlab-ci created<br />role.rbac.authorization.k8s.io/gitlab-ci created<br />rolebinding.rbac.authorization.k8s.io/gitlab-ci created<br />**查看Pod：**<br />[root@k8s-master-node1 manifests]# kubectl -n kube-ops get pods<br />NAME                 READY   STATUS    RESTARTS   AGE<br />gitlab-8656b798ff-z54sm      1/1       Running     0           32m<br />gitlab-ci-runner-0         1/1       Running     0           32s<br />gitlab-ci-runner-1         1/1       Running     0           85s<br />**回到admin界面查看：**<br />![image.png](https://cdn.nlark.com/yuque/0/2023/png/35492615/1688705558211-9570b12b-d901-4793-98ca-c47bd8616998.png#averageHue=%23f9f7f7&clientId=uf07f5f4d-b952-4&from=paste&height=811&id=ua22c7d63&originHeight=892&originWidth=1772&originalType=binary&ratio=1.100000023841858&rotation=0&showTitle=false&size=104169&status=done&style=none&taskId=ua46424f0-f168-41c3-8d38-bf403770f90&title=&width=1610.9090559935773)<br />可以看到Runner已经注册成功。
 <a name="opQmO"></a>
-### 5.3 配置GitLab
+###  配置GitLab
 <a name="iQ4Gg"></a>
 #### （1）开启Container Registry
 进入我们的项目，依次点击“设置”→“CI/CD”，如图所示：<br />![image.png](https://cdn.nlark.com/yuque/0/2023/png/35492615/1688705890631-6e3e70bd-2454-4e59-b02d-b0f7b2db7e32.png#averageHue=%23fcfcfb&clientId=uf07f5f4d-b952-4&from=paste&height=802&id=u389c259e&originHeight=882&originWidth=1850&originalType=binary&ratio=1.100000023841858&rotation=0&showTitle=false&size=87113&status=done&style=none&taskId=u7c93e3b8-d3a9-4900-8d2b-b7823aafc14&title=&width=1681.8181453657553)<br />展开“变量”栏目，配置镜像仓库相关的参数。  <br />**key : value的形式**
